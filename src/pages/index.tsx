@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+const RESAS_API_KEY: string = process.env.NEXT_PUBLIC_RESAS_API_KEY!;
 
 const Home: NextPage = () => {
   return (

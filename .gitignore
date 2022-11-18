@@ -1,7 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-## IDE
+# IDE
 /.idea
+
+# APP
+.env
+
+
 
 # dependencies
 /node_modules
