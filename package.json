@@ -12,7 +12,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "**/*": "yarn fmt"
+    "{src,__TEST__}/**/*.{ts,tsx}": "yarn fmt"
   },
   "dependencies": {
     "next": "13.0.4",
