@@ -11,6 +11,7 @@ const Home: NextPage = () => {
 
       <main>
         <h1>population-transition-chart</h1>
+          <p>test</p>
       </main>
     </div>
   );
