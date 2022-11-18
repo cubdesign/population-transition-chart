@@ -11,7 +11,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "**/*": "fmt"
+    "**/*": "yarn fmt"
   },
   "dependencies": {
     "next": "13.0.4",
