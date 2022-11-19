@@ -10,6 +10,11 @@ https://population-transition-chart-zeta.vercel.app/
 
 ## インストール
 
+```bash
+yarn install
 ```
+
+```bash
+cd e2e
 yarn install
 ```

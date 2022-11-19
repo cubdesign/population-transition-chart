@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run"
   },
   "dependencies": {
     "cypress": "^11.1.0",
