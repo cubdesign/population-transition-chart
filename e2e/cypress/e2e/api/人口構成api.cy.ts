@@ -1,4 +1,4 @@
-describe("empty spec", () => {
+describe("人口構成 apiのテスト", () => {
   it("人口構成 北海道 - GET", () => {
     const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
     cy.request({

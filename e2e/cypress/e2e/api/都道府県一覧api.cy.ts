@@ -1,4 +1,4 @@
-describe("都道府県一覧", () => {
+describe("都道府県一覧 apiのテスト", () => {
   it("都道府県一覧 - GET", () => {
     const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
     cy.request({
