@@ -1,9 +1,11 @@
 describe("都道府県一覧 apiのテスト", () => {
+  const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
+  const RESAS_API_URL: string = Cypress.env("RESAS_API_URL");
+
   it("都道府県一覧 - GET", () => {
-    const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
     cy.request({
       method: "GET",
-      url: "https://opendata.resas-portal.go.jp/api/v1/prefectures",
+      url: `${RESAS_API_URL}/prefectures`,
       headers: {
         "X-API-KEY": RESAS_API_KEY,
       },

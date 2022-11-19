@@ -1,9 +1,11 @@
 describe("人口構成 apiのテスト", () => {
+  const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
+  const RESAS_API_URL: string = Cypress.env("RESAS_API_URL");
+
   it("人口構成 北海道 - GET", () => {
-    const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
     cy.request({
       method: "GET",
-      url: "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear",
+      url: `${RESAS_API_URL}/population/composition/perYear`,
       qs: {
         cityCode: "-",
         prefCode: "1",
@@ -23,10 +25,9 @@ describe("人口構成 apiのテスト", () => {
     });
   });
   it("人口構成 東京都 - GET", () => {
-    const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
     cy.request({
       method: "GET",
-      url: "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear",
+      url: `${RESAS_API_URL}/population/composition/perYear`,
       qs: {
         cityCode: "-",
         prefCode: "13",
@@ -46,10 +47,9 @@ describe("人口構成 apiのテスト", () => {
     });
   });
   it("人口構成 沖縄 - GET", () => {
-    const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
     cy.request({
       method: "GET",
-      url: "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear",
+      url: `${RESAS_API_URL}/population/composition/perYear`,
       qs: {
         cityCode: "-",
         prefCode: "47",
