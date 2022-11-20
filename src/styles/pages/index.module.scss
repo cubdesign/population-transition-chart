@@ -1,0 +1,17 @@
+
+.container {
+}
+.list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+
+    background-color: antiquewhite;
+
+    li{
+        display: block;
+        list-style: none;
+        padding: 1rem;
+    }
+}

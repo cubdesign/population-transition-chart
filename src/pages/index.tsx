@@ -8,11 +8,12 @@ import {
   Prefecture,
 } from "@/services/resasApi";
 import { useState } from "react";
-import styles from "./index.module.css";
+import styles from "@/styles/pages/index.module.scss";
 
 import Highcharts from "highcharts";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import HighchartsReact from "highcharts-react-official";
+import clsx from "clsx";
 
 // init the Highcharts module
 if (typeof window !== `undefined`) {
@@ -36,7 +37,7 @@ const Home: NextPage = () => {
   });
 
   const { isLoading: isLoadingPopulationComposition } = useQuery({
-    queryKey: ["population-composition", { prefCode: 1 }],
+    queryKey: ["population-composition", 1],
     queryFn: () => getPopulationComposition(1),
     onSuccess: (data) => {
       const result = {
@@ -73,7 +74,7 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container)}>
       <Head>
         <title>population-transition-chart</title>
         <meta name="description" content="population-transition-chart" />
