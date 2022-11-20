@@ -1,40 +1,24 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries, UseQueryResult } from "@tanstack/react-query";
 import {
   getPopulationComposition,
-  getPrefectures,
   PopulationOfYear,
-  Prefecture,
 } from "@/services/resasApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/styles/pages/index.module.scss";
 
-import Highcharts from "highcharts";
-import highchartsAccessibility from "highcharts/modules/accessibility";
-import HighchartsReact from "highcharts-react-official";
 import clsx from "clsx";
-
-// init the Highcharts module
-if (typeof window !== `undefined`) {
-  highchartsAccessibility(Highcharts);
-}
+import PrefectureSelector from "@/components/PrefectureSelector";
+import Chart from "@/components/Chart";
 
 const Home: NextPage = () => {
-  const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
+  const [prefectureIds, setPrefectureIds] = useState<number[]>([]);
 
   const [populationComposition, setPopulationComposition] = useState<{
     boundaryYear: number;
     data: PopulationOfYear[];
   }>({ boundaryYear: 0, data: [] });
-
-  const { isLoading: isLoadingPrefectures } = useQuery({
-    queryKey: ["prefectures"],
-    queryFn: getPrefectures,
-    onSuccess: (data) => {
-      setPrefectures(data.result);
-    },
-  });
 
   const { isLoading: isLoadingPopulationComposition } = useQuery({
     queryKey: ["population-composition", 1],
@@ -55,22 +39,44 @@ const Home: NextPage = () => {
     },
   });
 
-  const options: Highcharts.Options = {
-    accessibility: {
-      enabled: true,
+  const queries: UseQueryResult[] = useQueries({
+    queries: prefectureIds.map((id) => {
+      return {
+        queryKey: ["population-composition", id],
+        queryFn: () => getPopulationComposition(1),
+        onSuccess: (data: any) => {
+          const result = {
+            boundaryYear: data.result.boundaryYear,
+            data: data.result.data
+              .filter((item: any) => {
+                //console.log(item);
+                if (item.label === "総人口") {
+                  return item;
+                }
+              })
+              .at(0)!.data,
+          };
+          console.log("UseQueryResult", id);
+          console.log(result);
+        },
+      };
+    }),
+  });
+
+  useEffect(() => {
+    console.log("queries", queries);
+  }, [prefectureIds]);
+
+  const handleChangePrefecture = (
+    change: {
+      prefecture_id: number;
+      checked: boolean;
     },
-    chart: {
-      type: "spline",
-    },
-    title: {
-      text: "My chart",
-    },
-    series: [
-      {
-        type: "spline",
-        data: [1, 2, 1, 4, 3, 6],
-      },
-    ],
+    prefecture_ids: number[]
+  ) => {
+    console.log(change);
+    console.log(prefecture_ids);
+    setPrefectureIds([...prefecture_ids]);
   };
 
   return (
@@ -82,16 +88,7 @@ const Home: NextPage = () => {
 
       <main>
         <h1>population-transition-chart</h1>
-        <p>Prefectures</p>
-        {isLoadingPrefectures ? (
-          <p>Loading...</p>
-        ) : (
-          <ul className={styles.list}>
-            {prefectures.map((prefecture) => (
-              <li key={prefecture.prefCode}>{prefecture.prefName}</li>
-            ))}
-          </ul>
-        )}
+        <PrefectureSelector onChangePrefecture={handleChangePrefecture} />
 
         {isLoadingPopulationComposition ? (
           <p>Loading...</p>
@@ -103,7 +100,7 @@ const Home: NextPage = () => {
           </ul>
         )}
 
-        <HighchartsReact highcharts={Highcharts} options={options} />
+        <Chart />
       </main>
     </div>
   );
