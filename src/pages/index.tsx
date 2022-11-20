@@ -43,7 +43,7 @@ const Home: NextPage = () => {
     queries: prefectureIds.map((id) => {
       return {
         queryKey: ["population-composition", id],
-        queryFn: () => getPopulationComposition(1),
+        queryFn: () => getPopulationComposition(id),
         onSuccess: (data: any) => {
           const result = {
             boundaryYear: data.result.boundaryYear,

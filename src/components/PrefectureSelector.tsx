@@ -3,7 +3,7 @@ import { getPrefectures, Prefecture } from "@/services/resasApi";
 import { useQuery } from "@tanstack/react-query";
 import React, { FC, useState } from "react";
 import LabeledCheckbox from "@/components/ui/LabeledCheckbox";
-import { useForm, SubmitHandler, Controller, useWatch } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
