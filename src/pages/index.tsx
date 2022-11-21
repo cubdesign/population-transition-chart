@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useQuery, useQueries, UseQueryResult } from "@tanstack/react-query";
 import {
   getPopulationComposition,
+  PopulationCompositionResponse,
   PopulationOfYear,
 } from "@/services/resasApi";
 import { useEffect, useState } from "react";
@@ -14,32 +15,10 @@ import Chart from "@/components/Chart";
 
 const Home: NextPage = () => {
   const [prefectureIds, setPrefectureIds] = useState<number[]>([]);
-
-  const [populationComposition, setPopulationComposition] = useState<{
-    boundaryYear: number;
-    data: PopulationOfYear[];
-  }>({ boundaryYear: 0, data: [] });
-
-  const { isLoading: isLoadingPopulationComposition } = useQuery({
-    queryKey: ["population-composition", 1],
-    queryFn: () => getPopulationComposition(1),
-    onSuccess: (data) => {
-      const result = {
-        boundaryYear: data.result.boundaryYear,
-        data: data.result.data
-          .filter((item: any) => {
-            console.log(item);
-            if (item.label === "総人口") {
-              return item;
-            }
-          })
-          .at(0)!.data,
-      };
-      setPopulationComposition(result);
-    },
-  });
-
-  const queries: UseQueryResult[] = useQueries({
+  const [populations, setPopulations] = useState<
+    PopulationCompositionResponse[]
+  >([]);
+  const queries: UseQueryResult<PopulationCompositionResponse>[] = useQueries({
     queries: prefectureIds.map((id) => {
       return {
         queryKey: ["population-composition", id],
@@ -54,18 +33,29 @@ const Home: NextPage = () => {
                   return item;
                 }
               })
-              .at(0)!.data,
+              .at(0).data,
           };
-          console.log("UseQueryResult", id);
-          console.log(result);
+          // console.log("UseQueryResult", id);
+          // console.log("result", result);
         },
       };
     }),
   });
+  const allSuccess = queries.every((query) => query.isSuccess === true);
 
   useEffect(() => {
-    console.log("queries", queries);
+    console.log("prefectureIds", prefectureIds);
   }, [prefectureIds]);
+
+  useEffect(() => {
+    if (allSuccess) {
+      const list = queries
+        .filter((query) => query.isSuccess)
+        .map((query) => query.data!);
+      setPopulations(list);
+      console.log("list", list);
+    }
+  }, [allSuccess]);
 
   const handleChangePrefecture = (
     change: {
@@ -90,17 +80,7 @@ const Home: NextPage = () => {
         <h1>population-transition-chart</h1>
         <PrefectureSelector onChangePrefecture={handleChangePrefecture} />
 
-        {isLoadingPopulationComposition ? (
-          <p>Loading...</p>
-        ) : (
-          <ul className={styles.list}>
-            {populationComposition.data.map((data) => (
-              <li key={data.year}>{data.value}</li>
-            ))}
-          </ul>
-        )}
-
-        <Chart />
+        <Chart data={populations} />
       </main>
     </div>
   );
