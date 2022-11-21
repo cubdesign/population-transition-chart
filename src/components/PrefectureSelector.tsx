@@ -1,15 +1,15 @@
 import styles from "@/styles/components/PrefectureSelector.module.scss";
-import { getPrefectures, ApiPrefecture } from "@/services/resasApi";
-import { useQuery } from "@tanstack/react-query";
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import LabeledCheckbox from "@/components/ui/LabeledCheckbox";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import usePrefecture from "../hooks/usePrefecture";
+import usePrefecture, { Prefecture } from "../hooks/usePrefecture";
 
 type FormInput = {
-  prefectures: boolean[];
+  // 選択した都道府県のID（falseも許容）
+  // 例: { 5: true, 22: false, ... }
+  selected: boolean[];
 };
 
 const schema = yup.object({
@@ -18,8 +18,8 @@ const schema = yup.object({
 
 export type PrefectureSelectorProps = {
   onChangePrefecture?: (
-    change: { prefecture_id: number; checked: boolean },
-    ids: number[]
+    change: { prefecture: Prefecture; checked: boolean },
+    all: Prefecture[]
   ) => void;
 };
 
@@ -28,25 +28,27 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
 }) => {
   const { control, handleSubmit, setValue } = useForm<FormInput>({
     resolver: yupResolver(schema),
-    defaultValues: { prefectures: [] },
+    defaultValues: { selected: [] },
   });
 
   const { isLoading, prefectures } = usePrefecture();
 
-  const getSelectedPrefectureIds = (prefectures: boolean[]): number[] => {
-    const prefecture_ids = Object.keys(prefectures)
-      .filter((key) => {
-        return prefectures[Number(key)];
+  const getSelectedPrefecture = (selected: boolean[]): Prefecture[] => {
+    return Object.keys(selected)
+      .filter((code) => {
+        // 選択されている都道府県のみのcode返す
+        return selected[Number(code)];
       })
-      .map((key) => {
-        return Number(key);
+      .map((code) => {
+        return prefectures.find(
+          (prefecture) => prefecture.code === Number(code)
+        )!;
       });
-    return prefecture_ids;
   };
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
     try {
-      console.log(getSelectedPrefectureIds(data.prefectures));
+      console.log(getSelectedPrefecture(data.selected));
     } catch (err) {
       console.log(err);
     }
@@ -61,29 +63,27 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             control={control}
-            name={`prefectures`}
+            name={`selected`}
             render={({ field }) => (
               <div className={styles.list}>
                 {prefectures.map((prefecture) => (
                   <LabeledCheckbox
                     {...field}
-                    key={prefecture.prefCode}
-                    label={prefecture.prefName}
-                    value={prefecture.prefCode}
+                    key={prefecture.code}
+                    label={prefecture.name}
+                    value={prefecture.code}
                     defaultChecked={false}
                     onChange={(e) => {
-                      setValue(
-                        `prefectures.${prefecture.prefCode}`,
-                        e.target.checked
-                      );
+                      setValue(`selected.${prefecture.code}`, e.target.checked);
 
                       if (onChangePrefecture) {
+                        const selected = field.value;
                         onChangePrefecture(
                           {
-                            prefecture_id: prefecture.prefCode,
+                            prefecture,
                             checked: e.target.checked,
                           },
-                          getSelectedPrefectureIds(field.value)
+                          getSelectedPrefecture(selected)
                         );
                       }
                     }}

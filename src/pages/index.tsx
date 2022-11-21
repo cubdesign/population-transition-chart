@@ -8,25 +8,28 @@ import clsx from "clsx";
 import PrefectureSelector from "@/components/PrefectureSelector";
 import Chart from "@/components/Chart";
 import usePopulationComposition from "../hooks/usePopulationComposition";
+import { Prefecture } from "../hooks/usePrefecture";
 
 const Home: NextPage = () => {
-  const [prefectureIds, setPrefectureIds] = useState<number[]>([]);
-  const { populations } = usePopulationComposition(prefectureIds);
+  const [selectedPrefecture, setSelectedPrefecture] = useState<Prefecture[]>(
+    []
+  );
+  const { populations } = usePopulationComposition(selectedPrefecture);
 
   useEffect(() => {
-    console.log("prefectureIds", prefectureIds);
-  }, [prefectureIds]);
+    console.log("selectedPrefecture", selectedPrefecture);
+  }, [selectedPrefecture]);
 
   const handleChangePrefecture = (
     change: {
-      prefecture_id: number;
+      prefecture: Prefecture;
       checked: boolean;
     },
-    prefecture_ids: number[]
+    all: Prefecture[]
   ) => {
     console.log(change);
-    console.log(prefecture_ids);
-    setPrefectureIds([...prefecture_ids]);
+    console.log(all);
+    setSelectedPrefecture(all);
   };
 
   return (

@@ -4,18 +4,19 @@ import {
   ApiPopulationCompositionResponse,
 } from "@/services/resasApi";
 import { useEffect, useState } from "react";
+import { Prefecture } from "./usePrefecture";
 
-const usePopulationComposition = (prefectureIds: number[]) => {
+const usePopulationComposition = (prefectures: Prefecture[]) => {
   const [populations, setPopulations] = useState<
     ApiPopulationCompositionResponse[]
   >([]);
 
   const queries: UseQueryResult<ApiPopulationCompositionResponse>[] =
     useQueries({
-      queries: prefectureIds.map((id) => {
+      queries: prefectures.map((prefecture) => {
         return {
-          queryKey: ["population-composition", id],
-          queryFn: () => getPopulationComposition(id),
+          queryKey: ["population-composition", prefecture.code],
+          queryFn: () => getPopulationComposition(prefecture.code),
           onSuccess: (data: any) => {
             const result = {
               boundaryYear: data.result.boundaryYear,
@@ -34,7 +35,7 @@ const usePopulationComposition = (prefectureIds: number[]) => {
         };
       }),
     });
-  const allSuccess = queries.every((query) => query.isSuccess === true);
+  const allSuccess = queries.every((query) => query.isSuccess);
 
   useEffect(() => {
     if (allSuccess) {
