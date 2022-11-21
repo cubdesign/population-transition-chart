@@ -6,6 +6,7 @@ import LabeledCheckbox from "@/components/ui/LabeledCheckbox";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import usePrefecture from "../hooks/usePrefecture";
 
 type FormInput = {
   prefectures: boolean[];
@@ -30,15 +31,7 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
     defaultValues: { prefectures: [] },
   });
 
-  const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
-
-  const { isLoading } = useQuery({
-    queryKey: [`prefectures`],
-    queryFn: getPrefectures,
-    onSuccess: (data) => {
-      setPrefectures(data.result);
-    },
-  });
+  const { isLoading, prefectures } = usePrefecture();
 
   const getSelectedPrefectureIds = (prefectures: boolean[]): number[] => {
     const prefecture_ids = Object.keys(prefectures)

@@ -12,50 +12,15 @@ import styles from "@/styles/pages/index.module.scss";
 import clsx from "clsx";
 import PrefectureSelector from "@/components/PrefectureSelector";
 import Chart from "@/components/Chart";
+import usePopulationComposition from "../hooks/usePopulationComposition";
 
 const Home: NextPage = () => {
   const [prefectureIds, setPrefectureIds] = useState<number[]>([]);
-  const [populations, setPopulations] = useState<
-    PopulationCompositionResponse[]
-  >([]);
-  const queries: UseQueryResult<PopulationCompositionResponse>[] = useQueries({
-    queries: prefectureIds.map((id) => {
-      return {
-        queryKey: ["population-composition", id],
-        queryFn: () => getPopulationComposition(id),
-        onSuccess: (data: any) => {
-          const result = {
-            boundaryYear: data.result.boundaryYear,
-            data: data.result.data
-              .filter((item: any) => {
-                //console.log(item);
-                if (item.label === "総人口") {
-                  return item;
-                }
-              })
-              .at(0).data,
-          };
-          // console.log("UseQueryResult", id);
-          // console.log("result", result);
-        },
-      };
-    }),
-  });
-  const allSuccess = queries.every((query) => query.isSuccess === true);
+  const { populations } = usePopulationComposition(prefectureIds);
 
   useEffect(() => {
     console.log("prefectureIds", prefectureIds);
   }, [prefectureIds]);
-
-  useEffect(() => {
-    if (allSuccess) {
-      const list = queries
-        .filter((query) => query.isSuccess)
-        .map((query) => query.data!);
-      setPopulations(list);
-      console.log("list", list);
-    }
-  }, [allSuccess]);
 
   const handleChangePrefecture = (
     change: {
