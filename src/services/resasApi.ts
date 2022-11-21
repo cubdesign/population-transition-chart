@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 /**
  * 都道府県
@@ -49,14 +49,34 @@ export const apiClient = axios.create({
   },
 });
 
+apiClient.interceptors.response.use((response: AxiosResponse) => {
+  if (response.request.response === "400") {
+    throw new Error("400 Bad Request");
+  }
+  let lowJson: any = {};
+  try {
+    lowJson = JSON.parse(response.request.response);
+    if (lowJson.statusCode && lowJson.statusCode === "403") {
+      throw new Error("403 Forbidden");
+    }
+    if (lowJson.statusCode && lowJson.statusCode === "404") {
+      throw new Error("404 Not Found");
+    }
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      throw new Error("Response JSON SyntaxError");
+    }
+    throw err;
+  }
+
+  return response;
+});
 /**
  * 都道府県一覧を取得する
  */
 export const getPrefectures = async () => {
   const res = await apiClient.get<PrefectureResponse>("/prefectures");
-  if (res.request.response === "403") {
-    throw new Error("400 Bad Request");
-  }
+
   return res.data;
 };
 
@@ -75,8 +95,6 @@ export const getPopulationComposition = async (prefCode: number) => {
       },
     }
   );
-  if (res.request.response === "403") {
-    throw new Error("400 Bad Request");
-  }
+
   return res.data;
 };

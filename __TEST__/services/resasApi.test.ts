@@ -19,16 +19,69 @@ describe("resasApi 異常系", () => {
     );
   });
 
+  it("429 Too Many Requests", () => {
+    server.use(
+      rest.get(`${RESAS_API_URL}/prefectures`, (req, res, ctx) => {
+        return res.once(ctx.status(429));
+      })
+    );
+
+    expect(getPrefectures()).rejects.toThrow(
+      "Request failed with status code 429"
+    );
+  });
+
   it("400 Bad Request", () => {
     server.use(
       rest.get(
         `${RESAS_API_URL}/population/composition/perYear`,
         (req, res, ctx) => {
-          return res.once(ctx.status(200), ctx.body("403"));
+          return res.once(ctx.status(200), ctx.body("400"));
         }
       )
     );
 
     expect(getPopulationComposition(111)).rejects.toThrow("400 Bad Request");
+  });
+
+  it("403 Forbidden", () => {
+    server.use(
+      rest.get(
+        `${RESAS_API_URL}/population/composition/perYear`,
+        (req, res, ctx) => {
+          return res.once(
+            ctx.status(200),
+            ctx.json({
+              statusCode: "403",
+              message: "Forbidden.",
+              description: "",
+            })
+          );
+        }
+      )
+    );
+
+    expect(getPopulationComposition(111)).rejects.toThrow("403 Forbidden");
+  });
+
+  it("404 Not Found", () => {
+    server.use(
+      rest.get(
+        `${RESAS_API_URL}/population/composition/perYear`,
+        (req, res, ctx) => {
+          return res.once(
+            ctx.status(200),
+            ctx.json({
+              statusCode: "404",
+              message: "404. That's an error.",
+              description:
+                "The requested URL /404 was not found on this server.",
+            })
+          );
+        }
+      )
+    );
+
+    expect(getPopulationComposition(111)).rejects.toThrow("404 Not Found");
   });
 });

@@ -18,7 +18,7 @@ describe("RESAS apiのエラーのテスト", () => {
     }).then((response) => {
       /*
         http status code 200
-        body : "403"
+        body : "400"
        */
       expect(response.status).to.eq(200);
       expect(response.body).to.eq("400");
