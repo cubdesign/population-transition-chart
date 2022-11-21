@@ -1,38 +1,39 @@
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
 import {
   getPopulationComposition,
-  PopulationCompositionResponse,
+  ApiPopulationCompositionResponse,
 } from "@/services/resasApi";
 import { useEffect, useState } from "react";
 
 const usePopulationComposition = (prefectureIds: number[]) => {
   const [populations, setPopulations] = useState<
-    PopulationCompositionResponse[]
+    ApiPopulationCompositionResponse[]
   >([]);
 
-  const queries: UseQueryResult<PopulationCompositionResponse>[] = useQueries({
-    queries: prefectureIds.map((id) => {
-      return {
-        queryKey: ["population-composition", id],
-        queryFn: () => getPopulationComposition(id),
-        onSuccess: (data: any) => {
-          const result = {
-            boundaryYear: data.result.boundaryYear,
-            data: data.result.data
-              .filter((item: any) => {
-                //console.log(item);
-                if (item.label === "総人口") {
-                  return item;
-                }
-              })
-              .at(0).data,
-          };
-          // console.log("UseQueryResult", id);
-          // console.log("result", result);
-        },
-      };
-    }),
-  });
+  const queries: UseQueryResult<ApiPopulationCompositionResponse>[] =
+    useQueries({
+      queries: prefectureIds.map((id) => {
+        return {
+          queryKey: ["population-composition", id],
+          queryFn: () => getPopulationComposition(id),
+          onSuccess: (data: any) => {
+            const result = {
+              boundaryYear: data.result.boundaryYear,
+              data: data.result.data
+                .filter((item: any) => {
+                  //console.log(item);
+                  if (item.label === "総人口") {
+                    return item;
+                  }
+                })
+                .at(0).data,
+            };
+            // console.log("UseQueryResult", id);
+            // console.log("result", result);
+          },
+        };
+      }),
+    });
   const allSuccess = queries.every((query) => query.isSuccess === true);
 
   useEffect(() => {

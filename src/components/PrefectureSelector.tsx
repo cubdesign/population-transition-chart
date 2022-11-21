@@ -1,5 +1,5 @@
 import styles from "@/styles/components/PrefectureSelector.module.scss";
-import { getPrefectures, Prefecture } from "@/services/resasApi";
+import { getPrefectures, ApiPrefecture } from "@/services/resasApi";
 import { useQuery } from "@tanstack/react-query";
 import React, { FC, useState } from "react";
 import LabeledCheckbox from "@/components/ui/LabeledCheckbox";

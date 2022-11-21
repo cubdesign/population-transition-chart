@@ -1,11 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useQuery, useQueries, UseQueryResult } from "@tanstack/react-query";
-import {
-  getPopulationComposition,
-  PopulationCompositionResponse,
-  PopulationOfYear,
-} from "@/services/resasApi";
+
 import { useEffect, useState } from "react";
 import styles from "@/styles/pages/index.module.scss";
 

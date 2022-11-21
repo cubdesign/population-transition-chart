@@ -4,7 +4,7 @@ import Highcharts from "highcharts";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import HighchartsReact from "highcharts-react-official";
 import { FC, useEffect, useRef, useState } from "react";
-import { PopulationCompositionResponse } from "@/services/resasApi";
+import { ApiPopulationCompositionResponse } from "@/services/resasApi";
 
 // init the Highcharts module
 if (typeof window !== `undefined`) {
@@ -12,7 +12,7 @@ if (typeof window !== `undefined`) {
 }
 type ChartData = number[];
 export type ChartProps = {
-  data: PopulationCompositionResponse[];
+  data: ApiPopulationCompositionResponse[];
 };
 
 const Chart: FC<ChartProps> = ({ data }) => {

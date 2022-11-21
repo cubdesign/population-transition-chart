@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPrefectures, Prefecture } from "@/services/resasApi";
+import { getPrefectures, ApiPrefecture } from "@/services/resasApi";
 import { useState } from "react";
 
 const usePrefecture = () => {
-  const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
+  const [prefectures, setPrefectures] = useState<ApiPrefecture[]>([]);
   const { isLoading } = useQuery({
     queryKey: [`prefectures`],
     queryFn: getPrefectures,

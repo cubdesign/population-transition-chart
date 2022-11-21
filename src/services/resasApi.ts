@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 /**
  * 都道府県
  */
-export type Prefecture = {
+export type ApiPrefecture = {
   prefCode: number;
   prefName: string;
 };
@@ -11,7 +11,7 @@ export type Prefecture = {
 /**
  * 年の人口
  */
-export type PopulationOfYear = {
+export type ApiPopulationOfYear = {
   year: number;
   value: number;
   rate?: number;
@@ -20,21 +20,21 @@ export type PopulationOfYear = {
 /**
  * 都道府県 Response
  */
-export type PrefectureResponse = {
+export type ApiPrefectureResponse = {
   message: string | null;
-  result: Prefecture[];
+  result: ApiPrefecture[];
 };
 
 /**
  * 人口構成 Response
  */
-export type PopulationCompositionResponse = {
+export type ApiPopulationCompositionResponse = {
   message: string | null;
   result: {
     boundaryYear: number;
     data: {
       label: string;
-      data: PopulationOfYear[];
+      data: ApiPopulationOfYear[];
     }[];
   };
 };
@@ -75,7 +75,7 @@ apiClient.interceptors.response.use((response: AxiosResponse) => {
  * 都道府県一覧を取得する
  */
 export const getPrefectures = async () => {
-  const res = await apiClient.get<PrefectureResponse>("/prefectures");
+  const res = await apiClient.get<ApiPrefectureResponse>("/prefectures");
 
   return res.data;
 };
@@ -86,7 +86,7 @@ export const getPrefectures = async () => {
  * @param prefCode　都道府県コード
  */
 export const getPopulationComposition = async (prefCode: number) => {
-  const res = await apiClient.get<PopulationCompositionResponse>(
+  const res = await apiClient.get<ApiPopulationCompositionResponse>(
     `/population/composition/perYear`,
     {
       params: {
