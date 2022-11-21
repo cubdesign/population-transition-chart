@@ -14,7 +14,7 @@ const usePrefecture = () => {
     queryFn: getPrefectures,
     onSuccess: (data) => {
       setPrefectures(
-        data.result.map((prefecture: ApiPrefecture) => {
+        data.result.map<Prefecture>((prefecture: ApiPrefecture) => {
           return { code: prefecture.prefCode, name: prefecture.prefName };
         })
       );

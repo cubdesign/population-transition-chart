@@ -31,6 +31,8 @@ export type ApiPrefectureResponse = {
 export type ApiPopulationCompositionResponse = {
   message: string | null;
   result: {
+    // 不便なので都道府県コードを追加
+    prefCode: number;
     boundaryYear: number;
     data: {
       label: string;
@@ -76,7 +78,6 @@ apiClient.interceptors.response.use((response: AxiosResponse) => {
  */
 export const getPrefectures = async () => {
   const res = await apiClient.get<ApiPrefectureResponse>("/prefectures");
-
   return res.data;
 };
 
@@ -96,5 +97,7 @@ export const getPopulationComposition = async (prefCode: number) => {
     }
   );
 
+  // 不便なので都道府県コードを追加
+  res.data.result.prefCode = prefCode;
   return res.data;
 };
