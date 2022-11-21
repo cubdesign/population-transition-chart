@@ -54,6 +54,9 @@ export const apiClient = axios.create({
  */
 export const getPrefectures = async () => {
   const res = await apiClient.get<PrefectureResponse>("/prefectures");
+  if (res.request.response === "403") {
+    throw new Error("400 Bad Request");
+  }
   return res.data;
 };
 
@@ -72,5 +75,8 @@ export const getPopulationComposition = async (prefCode: number) => {
       },
     }
   );
+  if (res.request.response === "403") {
+    throw new Error("400 Bad Request");
+  }
   return res.data;
 };
