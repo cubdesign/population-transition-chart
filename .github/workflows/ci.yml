@@ -25,7 +25,10 @@ jobs:
           node-version: "16"
 
       - name: Install dependencies
-        run: yarn
+        run: yarn install
+
+      - name: Install e2e dependencies
+        run: yarn --cwd e2e install
 
       - name: Build
         run: yarn build
