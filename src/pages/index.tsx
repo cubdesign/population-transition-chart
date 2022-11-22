@@ -16,10 +16,6 @@ const Home: NextPage = () => {
   );
   const { populations } = usePopulationComposition(selectedPrefecture);
 
-  useEffect(() => {
-    console.log("selectedPrefecture", selectedPrefecture);
-  }, [selectedPrefecture]);
-
   const handleChangePrefecture = (
     change: {
       prefecture: Prefecture;
@@ -27,9 +23,6 @@ const Home: NextPage = () => {
     },
     all: Prefecture[]
   ) => {
-    console.log(change);
-    console.log(all);
-
     setSelectedPrefecture(all);
   };
 

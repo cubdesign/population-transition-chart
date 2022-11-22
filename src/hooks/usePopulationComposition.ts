@@ -60,8 +60,8 @@ const usePopulationComposition = (prefectures: Prefecture[]) => {
           };
         });
       setPopulations(list);
-      console.log("list", list);
     }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [allSuccess, prefectures]);
 
   return { populations, isLoading: !allSuccess };
