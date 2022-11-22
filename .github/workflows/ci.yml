@@ -37,8 +37,8 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
-          build: yarn build
-          start: yarn start
+          build: yarn --cwd ../ build
+          start: yarn --cwd ../ start
           wait-on: "http://localhost:3000"
           working-directory: e2e
           browser: chrome
