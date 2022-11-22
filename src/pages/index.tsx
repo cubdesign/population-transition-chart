@@ -41,7 +41,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <h1 className={styles.title}>population-transition-chart</h1>
+        <h1 className={styles.title}>population333-transition-chart</h1>
         <PrefectureSelector onChangePrefecture={handleChangePrefecture} />
 
         <Chart data={populations} />
