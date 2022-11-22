@@ -6,8 +6,14 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  NEXT_PUBLIC_RESAS_API_KEY: ${{secrets.NEXT_PUBLIC_RESAS_API_KEY}}
+  NEXT_PUBLIC_RESAS_API_URL: ${{secrets.NEXT_PUBLIC_RESAS_API_URL}}
+  CYPRESS_RESAS_API_KEY: ${{secrets.CYPRESS_RESAS_API_KEY}}
+  CYPRESS_RESAS_API_URL: ${{secrets.CYPRESS_RESAS_API_URL}}
+
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,13 +26,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn
-
-      - name: run hello action
-        env:
-          NEXT_PUBLIC_RESAS_API_KEY: ${{secrets.NEXT_PUBLIC_RESAS_API_KEY}}
-          NEXT_PUBLIC_RESAS_API_URL: ${{secrets.NEXT_PUBLIC_RESAS_API_URL}}
-          CYPRESS_RESAS_API_KEY: ${{secrets.CYPRESS_RESAS_API_KEY}}
-          CYPRESS_RESAS_API_URL: ${{secrets.CYPRESS_RESAS_API_URL}}
 
       - name: Build
         run: yarn build
