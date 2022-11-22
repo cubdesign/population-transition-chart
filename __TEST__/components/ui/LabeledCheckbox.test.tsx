@@ -12,8 +12,8 @@ describe("LabeledCheckbox", () => {
     const checkbox = screen.getByRole("checkbox");
     expect(checkbox).toBeInTheDocument();
   });
-  it("checkedを渡すと、チェックされること", () => {
-    render(<LabeledCheckbox label="東京都" checked={true} />);
+  it("defaultCheckedを渡すと、チェックされること", () => {
+    render(<LabeledCheckbox label="東京都" defaultChecked={true} />);
     const checkbox = screen.getByRole<HTMLInputElement>("checkbox");
     expect(checkbox.checked).toBe(true);
   });
