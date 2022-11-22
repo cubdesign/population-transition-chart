@@ -7,8 +7,8 @@ on:
     branches: [ main ]
 
 env:
-  NEXT_PUBLIC_RESAS_API_KEY: ${{secrets.NEXT_PUBLIC_RESAS_API_KEY}}
-  NEXT_PUBLIC_RESAS_API_URL: ${{secrets.NEXT_PUBLIC_RESAS_API_URL}}
+  NEXT_PUBLIC_RESAS_API_KEY: ${{ secrets.NEXT_PUBLIC_RESAS_API_KEY }}
+  NEXT_PUBLIC_RESAS_API_URL: ${{ secrets.NEXT_PUBLIC_RESAS_API_URL }}
 
 jobs:
   ci:
@@ -44,5 +44,5 @@ jobs:
           browser: chrome
           headed: true
         env:
-          CYPRESS_RESAS_API_KEY: ${{secrets.CYPRESS_RESAS_API_KEY}}
-          CYPRESS_RESAS_API_URL: ${{secrets.CYPRESS_RESAS_API_URL}}
+          CYPRESS_RESAS_API_KEY: ${{ secrets.CYPRESS_RESAS_API_KEY }}
+          CYPRESS_RESAS_API_URL: ${{ secrets.CYPRESS_RESAS_API_URL }}
