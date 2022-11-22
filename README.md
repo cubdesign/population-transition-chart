@@ -29,6 +29,7 @@ yarn install
 
 ```
 NEXT_PUBLIC_RESAS_API_KEY=XXXXXXXXXXXXXXXX　# RESAS APIのAPIキー
+NEXT_PUBLIC_RESAS_API_URL=https://opendata.resas-portal.go.jp/api/v1
 ```
 
 
@@ -37,6 +38,7 @@ NEXT_PUBLIC_RESAS_API_KEY=XXXXXXXXXXXXXXXX　# RESAS APIのAPIキー
 ```
 {
   "RESAS_API_KEY":"XXXXXXXXXXXXXXXX" // RESAS APIのAPIキー
+  "RESAS_API_URL":"https://opendata.resas-portal.go.jp/api/v1" // RESAS APIのURL
 }
 ```
 
@@ -118,4 +120,5 @@ https://population-transition-chart-zeta.vercel.app/
 vercelの管理画面から環境変数を設定します。
 ```
 NEXT_PUBLIC_RESAS_API_KEY=XXXXXXXXXXXXXXXX　# RESAS APIのAPIキー
+NEXT_PUBLIC_RESAS_API_URL=https://opendata.resas-portal.go.jp/api/v1　# RESAS APIのURL
 ```
