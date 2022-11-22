@@ -44,6 +44,6 @@ jobs:
           working-directory: e2e
           browser: chrome
           headed: true
-          env:
-            CYPRESS_RESAS_API_KEY: ${{secrets.CYPRESS_RESAS_API_KEY}}
-            CYPRESS_RESAS_API_URL: ${{secrets.CYPRESS_RESAS_API_URL}}
+        env:
+          CYPRESS_RESAS_API_KEY: ${{secrets.CYPRESS_RESAS_API_KEY}}
+          CYPRESS_RESAS_API_URL: ${{secrets.CYPRESS_RESAS_API_URL}}
