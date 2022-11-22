@@ -31,7 +31,7 @@ jobs:
         run: yarn build
 
       - name: Jest Test
-        run: yarn test
+        run: yarn test:ci
 
       - name: E2E Test
         run: yarn e2e:headless
