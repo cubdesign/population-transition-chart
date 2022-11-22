@@ -129,5 +129,5 @@ NEXT_PUBLIC_RESAS_API_KEY=XXXXXXXXXXXXXXXX　# RESAS APIのAPIキー
 NEXT_PUBLIC_RESAS_API_URL=https://opendata.resas-portal.go.jp/api/v1　# RESAS APIのURL
 
 CYPRESS_RESAS_API_KEY=XXXXXXXXXXXXXXXX　# RESAS APIのAPIキー
-CYPRESS_RESAS_API_URL=https://opendata.resas-portal.go.jp/api/v1　# RESAS APIのURL 
+CYPRESS_RESAS_API_URL=https://opendata.resas-portal.go.jp/api/v1　# RESAS APIのURL
 ```
