@@ -56,7 +56,7 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
 
   return (
     <div>
-      <h1 className={styles.header}>Prefectures</h1>
+      <h2 className={styles.header}>Prefectures</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : (

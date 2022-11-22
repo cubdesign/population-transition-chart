@@ -1,7 +1,7 @@
-describe("人口構成 apiのテスト", () => {
-  const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
-  const RESAS_API_URL: string = Cypress.env("RESAS_API_URL");
+const RESAS_API_KEY: string = Cypress.env("RESAS_API_KEY");
+const RESAS_API_URL: string = Cypress.env("RESAS_API_URL");
 
+describe("人口構成 apiのテスト", () => {
   it("人口構成 北海道 - GET", () => {
     cy.request({
       method: "GET",
