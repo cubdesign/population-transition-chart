@@ -29,6 +29,7 @@ const Home: NextPage = () => {
   ) => {
     console.log(change);
     console.log(all);
+
     setSelectedPrefecture(all);
   };
 
@@ -40,7 +41,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <h1>population-transition-chart</h1>
+        <h1 className={styles.title}>population-transition-chart</h1>
         <PrefectureSelector onChangePrefecture={handleChangePrefecture} />
 
         <Chart data={populations} />

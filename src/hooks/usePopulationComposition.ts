@@ -27,24 +27,10 @@ const usePopulationComposition = (prefectures: Prefecture[]) => {
         return {
           queryKey: ["population-composition", prefecture.code],
           queryFn: () => getPopulationComposition(prefecture.code),
-          onSuccess: (data: any) => {
-            const result = {
-              boundaryYear: data.result.boundaryYear,
-              data: data.result.data
-                .filter((item: any) => {
-                  //console.log(item);
-                  if (item.label === "総人口") {
-                    return item;
-                  }
-                })
-                .at(0).data,
-            };
-            // console.log("UseQueryResult", id);
-            // console.log("result", result);
-          },
         };
       }),
     });
+
   const allSuccess = queries.every((query) => query.isSuccess);
 
   useEffect(() => {
@@ -76,7 +62,7 @@ const usePopulationComposition = (prefectures: Prefecture[]) => {
       setPopulations(list);
       console.log("list", list);
     }
-  }, [allSuccess]);
+  }, [allSuccess, prefectures]);
 
   return { populations, isLoading: !allSuccess };
 };

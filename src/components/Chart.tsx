@@ -34,10 +34,6 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
-  // useEffect(() => {
-  //   if (chartComponentRef.current) chartComponentRef.current.chart?.reflow();
-  // }, [chartOptions]);
-
   useEffect(() => {
     const result = data.map<ChartData>((population) => {
       return {
@@ -52,6 +48,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
         }),
       };
     });
+
     setChartData(result);
   }, [data]);
 
@@ -62,11 +59,11 @@ const Chart: FC<ChartProps> = ({ data }) => {
       },
 
       title: {
-        text: "Highcharts drawing points",
+        text: "",
       },
 
       subtitle: {
-        text: "Using the Boost module",
+        text: "",
       },
 
       accessibility: {
@@ -78,6 +75,12 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
       tooltip: {
         valueDecimals: 2,
+      },
+
+      legend: {
+        layout: "vertical",
+        align: "right",
+        verticalAlign: "middle",
       },
 
       xAxis: {

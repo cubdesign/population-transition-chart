@@ -1,5 +1,10 @@
 .container {
 }
+.title {
+  text-align: center;
+  padding: 16px;
+  background-color: azure;
+}
 .list {
   display: flex;
   flex-direction: row;
