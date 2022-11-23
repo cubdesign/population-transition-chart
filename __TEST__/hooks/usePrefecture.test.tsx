@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { renderHook, waitFor } from "@testing-library/react";
-import usePrefecture from "../../src/hooks/usePrefecture";
+import usePrefecture from "@/hooks/usePrefecture";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
@@ -104,6 +104,7 @@ describe("usePrefecture", () => {
     const { result } = renderHook(() => usePrefecture(), { wrapper });
     await waitFor(() => {
       expect(result.current.isError).toBe(true);
+      expect(result.current.error).toBeInstanceOf(Error);
     });
   });
 });

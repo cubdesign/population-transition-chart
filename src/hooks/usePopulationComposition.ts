@@ -18,7 +18,17 @@ export type PopulationComposition = {
   data: PopulationOfYear[];
 };
 
-const usePopulationComposition = (prefectures: Prefecture[]) => {
+export type UsePopulationCompositionResult = {
+  populations: PopulationComposition[];
+  errors: Error[];
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+};
+
+const usePopulationComposition = (
+  prefectures: Prefecture[]
+): UsePopulationCompositionResult => {
   const [populations, setPopulations] = useState<PopulationComposition[]>([]);
 
   const queries: UseQueryResult<ApiPopulationCompositionResponse>[] =
@@ -31,7 +41,15 @@ const usePopulationComposition = (prefectures: Prefecture[]) => {
       }),
     });
 
-  const allSuccess = queries.every((query) => query.isSuccess);
+  const allSuccess =
+    prefectures.length > 0 && queries.every((query) => query.isSuccess);
+
+  const isError =
+    prefectures.length > 0 && queries.some((query) => query.isError);
+
+  const errors = queries
+    .filter((query) => query.isError)
+    .map((query) => query.error as Error);
 
   useEffect(() => {
     if (allSuccess) {
@@ -60,11 +78,20 @@ const usePopulationComposition = (prefectures: Prefecture[]) => {
           };
         });
       setPopulations(list);
+    } else if (prefectures.length === 0) {
+      setPopulations([]);
     }
+
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [allSuccess, prefectures]);
 
-  return { populations, isLoading: !allSuccess };
+  return {
+    populations,
+    errors,
+    isLoading: !allSuccess,
+    isSuccess: allSuccess,
+    isError,
+  };
 };
 
 export default usePopulationComposition;
