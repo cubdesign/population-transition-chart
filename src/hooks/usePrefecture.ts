@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPrefectures, ApiPrefecture } from "@/services/resasApi";
+import {
+  getPrefectures,
+  ApiPrefecture,
+  ApiPrefectureResponse,
+} from "@/services/resasApi";
 import { useState } from "react";
 
 export type Prefecture = {
@@ -7,9 +11,20 @@ export type Prefecture = {
   name: string;
 };
 
-const usePrefecture = () => {
+export type UsePrefectureResult = {
+  prefectures: Prefecture[];
+  error: Error | null;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+};
+
+const usePrefecture = (): UsePrefectureResult => {
   const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
-  const { isLoading } = useQuery({
+  const { isLoading, error, isSuccess, isError } = useQuery<
+    ApiPrefectureResponse,
+    Error
+  >({
     queryKey: [`prefectures`],
     queryFn: getPrefectures,
     onSuccess: (data) => {
@@ -20,6 +35,6 @@ const usePrefecture = () => {
       );
     },
   });
-  return { prefectures, isLoading };
+  return { prefectures, error, isLoading, isSuccess, isError };
 };
 export default usePrefecture;
