@@ -74,7 +74,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
       },
 
       tooltip: {
-        valueDecimals: 2,
+        shared: true,
       },
 
       legend: {
@@ -83,16 +83,37 @@ const Chart: FC<ChartProps> = ({ data }) => {
         verticalAlign: "middle",
       },
 
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: true,
+            radius: 2.5,
+          },
+        },
+      },
+
       xAxis: {
         type: "datetime",
-        title: {
-          text: "年",
-        },
+        crosshair: true,
+        plotLines: [
+          {
+            label: {
+              text: new Date().getFullYear().toString(),
+            },
+            color: "red", // Color value
+            value: Date.UTC(new Date().getFullYear(), 0, 1), // Value of where the line will appear
+            width: 0.5, // Width of the line
+          },
+        ],
       },
 
       yAxis: {
         title: {
           text: "人口",
+        },
+        crosshair: true,
+        labels: {
+          format: "{value}",
         },
       },
 
@@ -103,8 +124,17 @@ const Chart: FC<ChartProps> = ({ data }) => {
           data: data.data.map<[number, number]>((item) => {
             return [item.utc, item.value];
           }),
-          lineWidth: 0.5,
+          lineWidth: 1,
           name: data.prefecture.name,
+          zoneAxis: "x",
+          zones: [
+            {
+              value: Date.UTC(data.boundaryYear, 0, 1),
+            },
+            {
+              dashStyle: "Dash",
+            },
+          ],
         };
       }),
     };
