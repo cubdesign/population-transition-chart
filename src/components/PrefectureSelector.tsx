@@ -48,9 +48,9 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
     try {
-      console.log(getSelectedPrefecture(data.selected));
+      // console.log(getSelectedPrefecture(data.selected));
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 

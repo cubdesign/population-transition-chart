@@ -84,4 +84,14 @@ describe("resasApi 異常系", () => {
 
     expect(getPopulationComposition(111)).rejects.toThrow("404 Not Found");
   });
+
+  it("Response JSON SyntaxError", () => {
+    server.use(
+      rest.get(`${RESAS_API_URL}/prefectures`, (req, res, ctx) => {
+        return res.once(ctx.status(200), ctx.body("{sss:"));
+      })
+    );
+
+    expect(getPrefectures()).rejects.toThrow("Response JSON SyntaxError");
+  });
 });

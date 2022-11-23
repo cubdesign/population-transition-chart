@@ -85,6 +85,15 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
       xAxis: {
         type: "datetime",
+        title: {
+          text: "年",
+        },
+      },
+
+      yAxis: {
+        title: {
+          text: "人口",
+        },
       },
 
       series: chartData.map<Highcharts.SeriesOptionsType>((data) => {

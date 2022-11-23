@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/pages/index.module.scss";
 
 import clsx from "clsx";
@@ -16,10 +16,6 @@ const Home: NextPage = () => {
   );
   const { populations } = usePopulationComposition(selectedPrefecture);
 
-  useEffect(() => {
-    console.log("selectedPrefecture", selectedPrefecture);
-  }, [selectedPrefecture]);
-
   const handleChangePrefecture = (
     change: {
       prefecture: Prefecture;
@@ -27,9 +23,6 @@ const Home: NextPage = () => {
     },
     all: Prefecture[]
   ) => {
-    console.log(change);
-    console.log(all);
-
     setSelectedPrefecture(all);
   };
 
