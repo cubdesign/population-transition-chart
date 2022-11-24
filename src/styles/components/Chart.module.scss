@@ -1,3 +1,38 @@
 .header {
   text-align: center;
 }
+// highcharts用css
+.chart {
+  :global(.ptc-tooltip) {
+    :global(.header) {
+      padding: 0;
+      margin: 0;
+    }
+    :global(.body) {
+      padding: 0;
+      margin: 0;
+      width: auto;
+      display: grid;
+    }
+    :global(.body-1) {
+      //
+    }
+    :global(.body-2) {
+      grid-template-columns: repeat(2, minmax(140px, 1fr));
+    }
+    :global(.body-3) {
+      grid-template-columns: repeat(3, minmax(140px, 1fr));
+    }
+    :global(.footer) {
+      padding: 0;
+      margin: 0;
+    }
+
+    :global(.legend-symbol) {
+      display: inline-block;
+      vertical-align: bottom;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

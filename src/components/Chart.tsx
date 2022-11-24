@@ -4,8 +4,9 @@ import Highcharts from "highcharts";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import HighchartsReact from "highcharts-react-official";
 import { FC, useEffect, useRef, useState } from "react";
-import { PopulationComposition } from "../hooks/usePopulationComposition";
-import { Prefecture } from "../hooks/usePrefecture";
+import { PopulationComposition } from "@/hooks/usePopulationComposition";
+import { Prefecture } from "@/hooks/usePrefecture";
+import { useMediaQuery } from "react-responsive";
 
 // init the Highcharts module
 if (typeof window !== `undefined`) {
@@ -32,6 +33,8 @@ const Chart: FC<ChartProps> = ({ data }) => {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
 
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
   useEffect(() => {
@@ -53,6 +56,8 @@ const Chart: FC<ChartProps> = ({ data }) => {
   }, [data]);
 
   useEffect(() => {
+    const pointsLength = data.length;
+
     const options: Highcharts.Options = {
       chart: {
         // zoomType: "x",
@@ -82,8 +87,18 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
           const footer = ``;
 
+          let columns: number;
+
+          if (pointsLength > 32) {
+            columns = 3;
+          } else if (pointsLength > 16) {
+            columns = 2;
+          } else {
+            columns = 1;
+          }
+
           const body = this.points!.reduce(function (result, point) {
-            const legendSymbol = `<svg width="20" height="20" style="display: inline-block; vertical-align: bottom">
+            const legendSymbol = `<svg class="legend-symbol">
   ${point.series.legendItem?.symbol?.element.outerHTML}
 </svg>`;
             return (
@@ -94,15 +109,10 @@ const Chart: FC<ChartProps> = ({ data }) => {
             );
           }, "");
 
-          const html = `<div style="">
-  <div style="padding: 0;margin: 0;">${header}</div> 
-  <div style="padding: 0;margin: 0; 
-      width: auto;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(130px,1fr));
-      overflow: scroll;
-      ">${body}</div> 
-  <div style="padding: 0;margin: 0;">${footer}</div> 
+          const html = `<div class="ptc-tooltip">
+  <div class="header">${header}</div> 
+  <div class="body body-${columns}">${body}</div> 
+  <div class="footer">${footer}</div> 
 </div>`;
           console.log(html);
           return html;
@@ -117,6 +127,8 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
       plotOptions: {
         series: {
+          pointStart: Date.UTC(1960, 0, 1),
+          pointInterval: 24 * 60 * 60 * 1000 * 365,
           marker: {
             enabled: true,
             radius: 2.5,
@@ -137,6 +149,9 @@ const Chart: FC<ChartProps> = ({ data }) => {
             width: 0.5, // Width of the line
           },
         ],
+        labels: {
+          rotation: isMobile ? -45 : 0,
+        },
       },
 
       yAxis: {
@@ -173,11 +188,49 @@ const Chart: FC<ChartProps> = ({ data }) => {
         };
       }),
     };
+
+    if (isMobile) {
+      options.yAxis = {
+        title: {
+          text: "人口(万人)",
+        },
+        min: 0,
+        crosshair: true,
+        labels: {
+          formatter: function () {
+            return (Number(this.value) / 10000).toString();
+          },
+        },
+      };
+
+      if (pointsLength > 10) {
+        options.tooltip = {
+          shared: false,
+          formatter: function () {
+            const header = `${new Date(this.x!).getFullYear()}年`;
+            const footer = ``;
+
+            const legendSymbol = `<svg class="legend-symbol">
+  ${this.series.legendItem?.symbol?.element.outerHTML}
+</svg>`;
+            const body = `<div>${legendSymbol}${
+              this.series.name
+            }: ${this.point.y?.toLocaleString()} </div>`;
+            const html = `<div class="ptc-tooltip">
+  <div class="header">${header}</div> 
+  <div class="body">${body}</div> 
+  <div class="footer">${footer}</div> 
+</div>`;
+            return html;
+          },
+        };
+      }
+    }
     setChartOptions(options);
-  }, [chartData]);
+  }, [chartData, isMobile]);
 
   return (
-    <div>
+    <div className={styles.chart}>
       <h2 className={styles.header}>Chart</h2>
       <HighchartsReact
         highcharts={Highcharts}
