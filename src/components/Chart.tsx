@@ -75,6 +75,38 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
       tooltip: {
         shared: true,
+        borderWidth: 3,
+        useHTML: true,
+        formatter: function () {
+          const header = `${new Date(this.x!).getFullYear()}年`;
+
+          const footer = ``;
+
+          const body = this.points!.reduce(function (result, point) {
+            const legendSymbol = `<svg width="20" height="20" style="display: inline-block; vertical-align: bottom">
+  ${point.series.legendItem?.symbol?.element.outerHTML}
+</svg>`;
+            return (
+              result +
+              `<div>${legendSymbol}${
+                point.series.name
+              }: ${point.y?.toLocaleString()}</div>`
+            );
+          }, "");
+
+          const html = `<div style="">
+  <div style="padding: 0;margin: 0;">${header}</div> 
+  <div style="padding: 0;margin: 0; 
+      width: auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(130px,1fr));
+      overflow: scroll;
+      ">${body}</div> 
+  <div style="padding: 0;margin: 0;">${footer}</div> 
+</div>`;
+          console.log(html);
+          return html;
+        },
       },
 
       legend: {
@@ -111,9 +143,12 @@ const Chart: FC<ChartProps> = ({ data }) => {
         title: {
           text: "人口",
         },
+        min: 0,
         crosshair: true,
         labels: {
-          format: "{value}",
+          formatter: function () {
+            return this.value?.toLocaleString();
+          },
         },
       },
 
