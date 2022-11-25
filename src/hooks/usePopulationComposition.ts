@@ -1,9 +1,11 @@
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
+
 import {
   getPopulationComposition,
   ApiPopulationCompositionResponse,
   ApiPopulationOfYear,
 } from "@/services/resasApi";
+
 import { useEffect, useState } from "react";
 import { Prefecture } from "./usePrefecture";
 
@@ -24,6 +26,7 @@ export type UsePopulationCompositionResult = {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
+  refetch: () => void;
 };
 
 const usePopulationComposition = (
@@ -91,6 +94,9 @@ const usePopulationComposition = (
     isLoading: !allSuccess,
     isSuccess: allSuccess,
     isError,
+    refetch: () => {
+      queries.forEach((query) => query.refetch());
+    },
   };
 };
 
