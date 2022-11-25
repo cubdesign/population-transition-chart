@@ -5,6 +5,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import usePrefecture, { Prefecture } from "../hooks/usePrefecture";
+import ErrorBox from "@/components/ui/ErrorBox";
 
 type FormInput = {
   // 選択した都道府県のID（falseも許容）
@@ -33,7 +34,7 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
     defaultValues: { selected: [] },
   });
 
-  const { isLoading, prefectures } = usePrefecture();
+  const { isLoading, isError, prefectures, refetch } = usePrefecture();
 
   const getSelectedPrefecture = (selected: boolean[]): Prefecture[] => {
     return Object.keys(selected)
@@ -56,11 +57,21 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
     }
   };
 
+  if (isError) {
+    return (
+      <ErrorBox
+        message="都道府県の読み込みに失敗しました。時間をおいて再度お試しください。"
+        retry={true}
+        onRetry={refetch}
+        retryText="読み込み"
+      />
+    );
+  }
   return (
     <div className={className}>
       <h2 className={styles.header}>都道府県を選択してください</h2>
       {isLoading ? (
-        <p>Loading...</p>
+        <div className={styles.loading}>Loading...</div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller

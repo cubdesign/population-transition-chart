@@ -1,0 +1,27 @@
+@import "../../core";
+
+.container {
+  padding: space(4);
+}
+.inner {
+  text-align: center;
+  border: solid 1px #ccc;
+  padding: space(10) space(2);
+}
+
+.message {
+  font-size: pxToRem(16);
+  font-weight: bold;
+  margin-bottom: space(2);
+}
+
+.button {
+  border: solid 1px #ccc;
+  padding: space(2) space(4);
+  background-color: #7f7f7f;
+  color: #ffffff;
+  border-radius: pxToRem(4);
+  &:hover {
+    background-color: #000000;
+  }
+}

@@ -17,11 +17,12 @@ export type UsePrefectureResult = {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
+  refetch: () => void;
 };
 
 const usePrefecture = (): UsePrefectureResult => {
   const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
-  const { isLoading, error, isSuccess, isError } = useQuery<
+  const { isLoading, error, isSuccess, isError, refetch } = useQuery<
     ApiPrefectureResponse,
     Error
   >({
@@ -35,6 +36,6 @@ const usePrefecture = (): UsePrefectureResult => {
       );
     },
   });
-  return { prefectures, error, isLoading, isSuccess, isError };
+  return { prefectures, error, isLoading, isSuccess, isError, refetch };
 };
 export default usePrefecture;
