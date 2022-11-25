@@ -156,12 +156,15 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
       yAxis: {
         title: {
-          text: "人口",
+          text: isMobile ? "人口（万人）" : "人口（人）",
         },
         min: 0,
         crosshair: true,
         labels: {
           formatter: function () {
+            if (isMobile) {
+              return (Number(this.value) / 10000).toString();
+            }
             return this.value?.toLocaleString();
           },
         },
@@ -190,19 +193,6 @@ const Chart: FC<ChartProps> = ({ data }) => {
     };
 
     if (isMobile) {
-      options.yAxis = {
-        title: {
-          text: "人口(万人)",
-        },
-        min: 0,
-        crosshair: true,
-        labels: {
-          formatter: function () {
-            return (Number(this.value) / 10000).toString();
-          },
-        },
-      };
-
       if (pointsLength > 10) {
         options.tooltip = {
           shared: false,
