@@ -128,7 +128,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
       plotOptions: {
         series: {
           pointStart: Date.UTC(1960, 0, 1),
-          pointInterval: 24 * 60 * 60 * 1000 * 365,
+          pointInterval: 1000 * 60 * 60 * 24 * 365 * 5,
           marker: {
             enabled: true,
             radius: 2.5,
@@ -174,8 +174,33 @@ const Chart: FC<ChartProps> = ({ data }) => {
         return {
           id: data.prefecture.code.toString(),
           type: "line",
-          data: data.data.map<[number, number]>((item) => {
-            return [item.utc, item.value];
+          data: data.data.map<
+            | {
+                x: number;
+                y: number;
+              }
+            | {
+                x: number;
+                y: number;
+                marker: {
+                  enabled: boolean;
+                };
+              }
+          >((item) => {
+            if (isMobile && item.year > data.boundaryYear) {
+              return {
+                x: item.utc,
+                y: item.value,
+                marker: {
+                  enabled: false,
+                },
+              };
+            } else {
+              return {
+                x: item.utc,
+                y: item.value,
+              };
+            }
           }),
           lineWidth: 1,
           name: data.prefecture.name,
