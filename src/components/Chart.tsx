@@ -4,8 +4,9 @@ import Highcharts from "highcharts";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import HighchartsReact from "highcharts-react-official";
 import { FC, useEffect, useRef, useState } from "react";
-import { PopulationComposition } from "../hooks/usePopulationComposition";
-import { Prefecture } from "../hooks/usePrefecture";
+import { PopulationComposition } from "@/hooks/usePopulationComposition";
+import { Prefecture } from "@/hooks/usePrefecture";
+import { useMediaQuery } from "react-responsive";
 
 // init the Highcharts module
 if (typeof window !== `undefined`) {
@@ -32,6 +33,8 @@ const Chart: FC<ChartProps> = ({ data }) => {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
 
+  const isMobile = useMediaQuery({ maxWidth: 769 });
+
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
   useEffect(() => {
@@ -53,6 +56,8 @@ const Chart: FC<ChartProps> = ({ data }) => {
   }, [data]);
 
   useEffect(() => {
+    const pointsLength = data.length;
+
     const options: Highcharts.Options = {
       chart: {
         // zoomType: "x",
@@ -74,7 +79,44 @@ const Chart: FC<ChartProps> = ({ data }) => {
       },
 
       tooltip: {
-        valueDecimals: 2,
+        shared: true,
+        borderWidth: 3,
+        useHTML: true,
+        formatter: function () {
+          const header = `${new Date(this.x!).getFullYear()}年`;
+
+          const footer = ``;
+
+          let columns: number;
+
+          if (pointsLength > 32) {
+            columns = 3;
+          } else if (pointsLength > 16) {
+            columns = 2;
+          } else {
+            columns = 1;
+          }
+
+          const body = this.points!.reduce(function (result, point) {
+            const legendSymbol = `<svg class="legend-symbol">
+  ${point.series.legendItem?.symbol?.element.outerHTML}
+</svg>`;
+            return (
+              result +
+              `<div>${legendSymbol}${
+                point.series.name
+              }: ${point.y?.toLocaleString()}</div>`
+            );
+          }, "");
+
+          const html = `<div class="ptc-tooltip">
+  <div class="header">${header}</div> 
+  <div class="body body-${columns}">${body}</div> 
+  <div class="footer">${footer}</div> 
+</div>`;
+          console.log(html);
+          return html;
+        },
       },
 
       legend: {
@@ -83,16 +125,51 @@ const Chart: FC<ChartProps> = ({ data }) => {
         verticalAlign: "middle",
       },
 
+      plotOptions: {
+        series: {
+          pointStart: Date.UTC(1960, 0, 1),
+          // pointInterval: 1000 * 60 * 60 * 24 * 365,
+          marker: {
+            enabled: true,
+            radius: 2.5,
+          },
+        },
+      },
+
       xAxis: {
         type: "datetime",
-        title: {
-          text: "年",
+        crosshair: true,
+        plotLines: [
+          {
+            label: {
+              text: new Date().getFullYear().toString() + "年",
+            },
+            color: "red", // Color value
+            value: Date.UTC(new Date().getFullYear(), 0, 1), // Value of where the line will appear
+            width: 0.3, // Width of the line
+          },
+        ],
+        labels: {
+          rotation: isMobile ? -45 : 0,
         },
+        tickInterval: isMobile
+          ? 1000 * 60 * 60 * 24 * 365 * 10
+          : 1000 * 60 * 60 * 24 * 365 * 5,
       },
 
       yAxis: {
         title: {
-          text: "人口",
+          text: isMobile ? "人口（万人）" : "人口（人）",
+        },
+        min: 0,
+        crosshair: true,
+        labels: {
+          formatter: function () {
+            if (isMobile) {
+              return (Number(this.value) / 10000).toString();
+            }
+            return this.value?.toLocaleString();
+          },
         },
       },
 
@@ -100,20 +177,78 @@ const Chart: FC<ChartProps> = ({ data }) => {
         return {
           id: data.prefecture.code.toString(),
           type: "line",
-          data: data.data.map<[number, number]>((item) => {
-            return [item.utc, item.value];
+          data: data.data.map<
+            | {
+                x: number;
+                y: number;
+              }
+            | {
+                x: number;
+                y: number;
+                marker: {
+                  enabled: boolean;
+                };
+              }
+          >((item) => {
+            if (isMobile && item.year > data.boundaryYear) {
+              return {
+                x: item.utc,
+                y: item.value,
+                marker: {
+                  enabled: false,
+                },
+              };
+            } else {
+              return {
+                x: item.utc,
+                y: item.value,
+              };
+            }
           }),
-          lineWidth: 0.5,
+          lineWidth: 1,
           name: data.prefecture.name,
+          zoneAxis: "x",
+          zones: [
+            {
+              value: Date.UTC(data.boundaryYear, 0, 1),
+            },
+            {
+              dashStyle: "Dash",
+            },
+          ],
         };
       }),
     };
+
+    if (isMobile) {
+      if (pointsLength > 10) {
+        options.tooltip = {
+          shared: false,
+          formatter: function () {
+            const header = `${new Date(this.x!).getFullYear()}年`;
+            const footer = ``;
+
+            const legendSymbol = `<svg class="legend-symbol">
+  ${this.series.legendItem?.symbol?.element.outerHTML}
+</svg>`;
+            const body = `<div>${legendSymbol}${
+              this.series.name
+            }: ${this.point.y?.toLocaleString()} </div>`;
+            const html = `<div class="ptc-tooltip">
+  <div class="header">${header}</div> 
+  <div class="body">${body}</div> 
+  <div class="footer">${footer}</div> 
+</div>`;
+            return html;
+          },
+        };
+      }
+    }
     setChartOptions(options);
-  }, [chartData]);
+  }, [chartData, isMobile]);
 
   return (
-    <div>
-      <h2 className={styles.header}>Chart</h2>
+    <div className={styles.chart}>
       <HighchartsReact
         highcharts={Highcharts}
         options={chartOptions}
