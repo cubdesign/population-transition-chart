@@ -33,7 +33,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
 
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 769 });
 
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
@@ -128,7 +128,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
       plotOptions: {
         series: {
           pointStart: Date.UTC(1960, 0, 1),
-          pointInterval: 1000 * 60 * 60 * 24 * 365 * 5,
+          // pointInterval: 1000 * 60 * 60 * 24 * 365,
           marker: {
             enabled: true,
             radius: 2.5,
@@ -142,16 +142,19 @@ const Chart: FC<ChartProps> = ({ data }) => {
         plotLines: [
           {
             label: {
-              text: new Date().getFullYear().toString(),
+              text: new Date().getFullYear().toString() + "年",
             },
             color: "red", // Color value
             value: Date.UTC(new Date().getFullYear(), 0, 1), // Value of where the line will appear
-            width: 0.5, // Width of the line
+            width: 0.3, // Width of the line
           },
         ],
         labels: {
           rotation: isMobile ? -45 : 0,
         },
+        tickInterval: isMobile
+          ? 1000 * 60 * 60 * 24 * 365 * 10
+          : 1000 * 60 * 60 * 24 * 365 * 5,
       },
 
       yAxis: {
@@ -246,7 +249,6 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
   return (
     <div className={styles.chart}>
-      <h2 className={styles.header}>Chart</h2>
       <HighchartsReact
         highcharts={Highcharts}
         options={chartOptions}

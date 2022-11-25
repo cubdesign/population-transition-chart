@@ -1,8 +1,11 @@
-.header {
-  text-align: center;
-}
 // highcharts用css
 .chart {
+  padding: 16px;
+
+  @media (max-width: 769px) {
+    padding: 8px;
+  }
+
   :global(.ptc-tooltip) {
     :global(.header) {
       padding: 0;
