@@ -1,0 +1,42 @@
+@import "../core";
+.container {
+  text-align: center;
+}
+.inner {
+  display: inline-block;
+  border: solid 1px #ccc;
+  padding: space(1) space(2);
+}
+.legends {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  font-size: pxToRem(14);
+  white-space: nowrap;
+  gap: space(2);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &::before {
+    border-top: 1px solid #008800;
+    content: "";
+    width: 50px;
+    margin-right: space(1);
+  }
+}
+
+.legend1 {
+  &::before {
+    border-top-style: solid;
+  }
+}
+.legend2 {
+  &::before {
+    border-top-style: dashed;
+  }
+}
