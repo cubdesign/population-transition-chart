@@ -8,7 +8,7 @@ import clsx from "clsx";
 import PrefectureSelector from "@/components/PrefectureSelector";
 import Chart from "@/components/Chart";
 import usePopulationComposition from "../hooks/usePopulationComposition";
-import { Prefecture } from "../hooks/usePrefecture";
+import { Prefecture } from "@/hooks/usePrefecture";
 
 const Home: NextPage = () => {
   const [selectedPrefecture, setSelectedPrefecture] = useState<Prefecture[]>(
@@ -29,12 +29,15 @@ const Home: NextPage = () => {
   return (
     <div className={clsx(styles.container)}>
       <Head>
-        <title>population-transition-chart</title>
-        <meta name="description" content="population-transition-chart" />
+        <title>都道府県別の総人口推移</title>
+        <meta
+          name="description"
+          content="都道府県別の総人口推移をグラフで表示するアプリです。"
+        />
       </Head>
 
       <main>
-        <h1 className={styles.title}>population-transition-chart</h1>
+        <h1 className={styles.title}>都道府県別の総人口推移</h1>
         <PrefectureSelector onChangePrefecture={handleChangePrefecture} />
 
         <Chart data={populations} />

@@ -7,6 +7,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { PopulationComposition } from "@/hooks/usePopulationComposition";
 import { Prefecture } from "@/hooks/usePrefecture";
 import { useMediaQuery } from "react-responsive";
+import clsx from "clsx";
 
 // init the Highcharts module
 if (typeof window !== `undefined`) {
@@ -27,9 +28,10 @@ type ChartData = {
 
 export type ChartProps = {
   data: PopulationComposition[];
+  className?: string;
 };
 
-const Chart: FC<ChartProps> = ({ data }) => {
+const Chart: FC<ChartProps> = ({ data, className }) => {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
 
@@ -123,6 +125,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
         layout: "vertical",
         align: "right",
         verticalAlign: "middle",
+        itemMarginBottom: 10,
       },
 
       plotOptions: {
@@ -137,6 +140,9 @@ const Chart: FC<ChartProps> = ({ data }) => {
       },
 
       xAxis: {
+        title: {
+          text: "年度",
+        },
         type: "datetime",
         crosshair: true,
         plotLines: [
@@ -159,7 +165,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
 
       yAxis: {
         title: {
-          text: isMobile ? "人口（万人）" : "人口（人）",
+          text: isMobile ? "人口数（万人）" : "人口数（人）",
         },
         min: 0,
         crosshair: true,
@@ -248,7 +254,7 @@ const Chart: FC<ChartProps> = ({ data }) => {
   }, [chartData, isMobile]);
 
   return (
-    <div className={styles.chart}>
+    <div className={clsx(styles.chart, className)}>
       <HighchartsReact
         highcharts={Highcharts}
         options={chartOptions}

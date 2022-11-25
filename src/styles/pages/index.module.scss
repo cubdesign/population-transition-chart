@@ -1,21 +1,14 @@
+@import "../core";
 .container {
+  margin-bottom: space(10);
 }
 .title {
   text-align: center;
-  padding: 16px;
-  background-color: azure;
-}
-.list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  list-style: none;
-
-  background-color: antiquewhite;
-
-  li {
-    display: block;
-    list-style: none;
-    padding: 1rem;
+  padding: space(2);
+  font-weight: bold;
+  font-size: pxToRem(21);
+  @include mq(sm) {
+    margin: space(4);
+    font-size: pxToRem(32);
   }
 }

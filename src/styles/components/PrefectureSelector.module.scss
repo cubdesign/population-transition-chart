@@ -1,10 +1,29 @@
+@import "../core";
+
 .header {
   text-align: center;
+  font-size: pxToRem(16);
+  @include mq(sm) {
+    font-size: pxToRem(21);
+  }
 }
+
+.wrapper {
+  padding: space(2);
+  @include mq(sm) {
+    padding: space(4);
+  }
+}
+
 .list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
 
-  background-color: antiquewhite;
+.checkbox {
+  width: calc(100% / 4);
+  @include mq(sm) {
+    width: 100px;
+  }
 }

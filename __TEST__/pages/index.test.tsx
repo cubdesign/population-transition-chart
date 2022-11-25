@@ -10,7 +10,7 @@ describe("Home", () => {
         <Home />
       </QueryClientProvider>
     );
-    const heading = screen.getByText(/population-transition-chart/i);
+    const heading = screen.getByText(/都道府県別の総人口推移/i);
     expect(heading).toBeInTheDocument();
 
     // expect(

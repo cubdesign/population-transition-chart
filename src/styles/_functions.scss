@@ -1,0 +1,9 @@
+@import "variables";
+
+@function pxToRem($pixels) {
+  @return $pixels / $baseFontSize * 1rem;
+}
+
+@function space($num) {
+  @return $num * $grid + px;
+}
