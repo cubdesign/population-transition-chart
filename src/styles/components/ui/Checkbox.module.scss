@@ -1,16 +1,24 @@
+@import "../../core";
+
 .container {
-  padding: 0.5rem;
+  padding: space(1);
   user-select: none;
   cursor: pointer;
-  white-space: nowrap;
+  font-size: pxToRem(14);
   label {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: left;
   }
   input {
     cursor: pointer;
+    width: auto;
   }
   span {
-    display: inline-block;
-    padding-left: 8px;
+    display: block;
+    white-space: nowrap;
+    padding-left: space(1);
+    width: 100%;
   }
 }

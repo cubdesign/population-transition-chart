@@ -1,9 +1,10 @@
+@import "../core";
 // highcharts用css
 .chart {
-  padding: 16px;
+  padding: space(1);
 
-  @media (max-width: 769px) {
-    padding: 8px;
+  @include mq(sm) {
+    padding: space(2);
   }
 
   :global(.ptc-tooltip) {

@@ -21,10 +21,12 @@ export type PrefectureSelectorProps = {
     change: { prefecture: Prefecture; checked: boolean },
     all: Prefecture[]
   ) => void;
+  className?: string;
 };
 
 const PrefectureSelector: FC<PrefectureSelectorProps> = ({
   onChangePrefecture,
+  className,
 }) => {
   const { control, handleSubmit, setValue } = useForm<FormInput>({
     resolver: yupResolver(schema),
@@ -55,8 +57,8 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
   };
 
   return (
-    <div>
-      <h2 className={styles.header}>Prefectures</h2>
+    <div className={className}>
+      <h2 className={styles.header}>都道府県を選択してください</h2>
       {isLoading ? (
         <p>Loading...</p>
       ) : (
@@ -65,30 +67,36 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
             control={control}
             name={`selected`}
             render={({ field }) => (
-              <div className={styles.list}>
-                {prefectures.map((prefecture) => (
-                  <LabeledCheckbox
-                    {...field}
-                    key={prefecture.code}
-                    label={prefecture.name}
-                    value={prefecture.code}
-                    defaultChecked={false}
-                    onChange={(e) => {
-                      setValue(`selected.${prefecture.code}`, e.target.checked);
-
-                      if (onChangePrefecture) {
-                        const selected = field.value;
-                        onChangePrefecture(
-                          {
-                            prefecture,
-                            checked: e.target.checked,
-                          },
-                          getSelectedPrefecture(selected)
+              <div className={styles.wrapper}>
+                <div className={styles.list}>
+                  {prefectures.map((prefecture) => (
+                    <LabeledCheckbox
+                      {...field}
+                      key={prefecture.code}
+                      label={prefecture.name}
+                      value={prefecture.code}
+                      defaultChecked={false}
+                      className={styles.checkbox}
+                      onChange={(e) => {
+                        setValue(
+                          `selected.${prefecture.code}`,
+                          e.target.checked
                         );
-                      }
-                    }}
-                  />
-                ))}
+
+                        if (onChangePrefecture) {
+                          const selected = field.value;
+                          onChangePrefecture(
+                            {
+                              prefecture,
+                              checked: e.target.checked,
+                            },
+                            getSelectedPrefecture(selected)
+                          );
+                        }
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           />
