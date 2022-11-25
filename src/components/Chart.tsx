@@ -8,6 +8,7 @@ import { PopulationComposition } from "@/hooks/usePopulationComposition";
 import { Prefecture } from "@/hooks/usePrefecture";
 import { useMediaQuery } from "react-responsive";
 import clsx from "clsx";
+import ChartLegend from "@/components/ChartLegend";
 
 // init the Highcharts module
 if (typeof window !== `undefined`) {
@@ -260,6 +261,7 @@ const Chart: FC<ChartProps> = ({ data, className }) => {
         options={chartOptions}
         ref={chartComponentRef}
       />
+      {chartData.length > 0 && <ChartLegend />}
     </div>
   );
 };
