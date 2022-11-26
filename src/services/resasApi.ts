@@ -51,7 +51,8 @@ export const apiClient = axios.create({
   },
 });
 
-apiClient.interceptors.response.use((response: AxiosResponse) => {
+export const onFullfilledHandler = (response: AxiosResponse) => {
+  // Your interceptor handling a successful response
   if (response.request.response === "400") {
     throw new Error("400 Bad Request");
   }
@@ -72,7 +73,10 @@ apiClient.interceptors.response.use((response: AxiosResponse) => {
   }
 
   return response;
-});
+};
+
+apiClient.interceptors.response.use(onFullfilledHandler);
+
 /**
  * 都道府県一覧を取得する
  */
