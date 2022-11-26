@@ -28,4 +28,6 @@ describe("Home", () => {
       await screen.findByRole("button", { name: /東京都/i })
     ).toBeInTheDocument();
   });
+  it.todo("chartデータ読み込みに失敗したらエラーが表示される");
+  it.todo("chartデータ読み込みをretryできる");
 });
