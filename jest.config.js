@@ -29,6 +29,7 @@ const customJestConfig = {
   },
   // 除外するディレクトリ
   modulePathIgnorePatterns: ["<rootDir>/e2e/"],
+  coveragePathIgnorePatterns: ["<rootDir>/__TEST__/mocks/"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
