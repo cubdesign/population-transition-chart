@@ -73,7 +73,6 @@ export const tooltipFormatTypeShare = (
   <div class="body body-${columns}">${body}</div> 
   <div class="footer">${footer}</div> 
 </div>`;
-  console.log(html);
   return html;
 };
 
@@ -102,6 +101,7 @@ const useChart = (data: PopulationComposition[]): UseChartResult => {
 
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>({});
+  const [showSeriesCount, setShowSeriesCount] = useState<number>(0);
 
   useEffect(() => {
     const result = data.map<ChartData>((population) => {
@@ -168,6 +168,30 @@ const useChart = (data: PopulationComposition[]): UseChartResult => {
           marker: {
             enabled: true,
             radius: 2.5,
+          },
+          events: {
+            hide: function () {
+              //
+              let count = this.chart.series.reduce<number>((count, series) => {
+                if (series.visible) {
+                  count++;
+                }
+                return count;
+              }, 0);
+
+              setShowSeriesCount(count);
+            },
+            show: function () {
+              //
+              let count = this.chart.series.reduce<number>((count, series) => {
+                if (series.visible) {
+                  count++;
+                }
+                return count;
+              }, 0);
+
+              setShowSeriesCount(count);
+            },
           },
         },
       },
@@ -272,7 +296,7 @@ const useChart = (data: PopulationComposition[]): UseChartResult => {
       }
     }
     setChartOptions(options);
-  }, [chartData, isMobile]);
+  }, [chartData, isMobile, showSeriesCount]);
 
   return {
     chartData,
