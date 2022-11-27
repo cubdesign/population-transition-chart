@@ -69,9 +69,9 @@ export const tooltipFormatTypeShare = (
   }, "");
 
   const html = `<div class="ptc-tooltip">
-  <div class="header">${header}</div> 
-  <div class="body body-${columns}">${body}</div> 
-  <div class="footer">${footer}</div> 
+  <div class="header">${header}</div>
+  <div class="body body-${columns}">${body}</div>
+  <div class="footer">${footer}</div>
 </div>`;
   return html;
 };
@@ -85,11 +85,11 @@ export const tooltipFormatTypeSingle = (
   const legendSymbol = `<svg class="legend-symbol">${ctx.series.legendItem?.symbol?.element.outerHTML}</svg>`;
   const body = `<div>${legendSymbol}${
     ctx.series.name
-  }: ${ctx.point.y?.toLocaleString()} </div>`;
+  }: ${ctx.point.y?.toLocaleString()}</div>`;
   const html = `<div class="ptc-tooltip">
-  <div class="header">${header}</div> 
-  <div class="body">${body}</div> 
-  <div class="footer">${footer}</div> 
+  <div class="header">${header}</div>
+  <div class="body">${body}</div>
+  <div class="footer">${footer}</div>
 </div>`;
   return html;
 };
