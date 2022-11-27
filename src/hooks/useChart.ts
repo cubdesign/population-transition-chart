@@ -94,6 +94,74 @@ export const tooltipFormatTypeSingle = (
   return html;
 };
 
+export const createChartData = (data: PopulationComposition[]): ChartData[] => {
+  const result = data.map<ChartData>((population) => {
+    return {
+      boundaryYear: population.boundaryYear,
+      prefecture: population.prefecture,
+      data: population.data.map<Plot>((item) => {
+        return {
+          utc: yearToUTC(item.year),
+          year: item.year,
+          value: item.value,
+        };
+      }),
+    };
+  });
+  return result;
+};
+
+export const createSeriesData = (
+  chartData: ChartData[],
+  isMobile: boolean
+): Highcharts.SeriesOptionsType[] => {
+  return chartData.map<Highcharts.SeriesOptionsType>((data) => {
+    return {
+      id: data.prefecture.code.toString(),
+      type: "line",
+      data: data.data.map<
+        | {
+            x: number;
+            y: number;
+          }
+        | {
+            x: number;
+            y: number;
+            marker: {
+              enabled: boolean;
+            };
+          }
+      >((item) => {
+        if (isMobile && item.year > data.boundaryYear) {
+          return {
+            x: item.utc,
+            y: item.value,
+            marker: {
+              enabled: false,
+            },
+          };
+        } else {
+          return {
+            x: item.utc,
+            y: item.value,
+          };
+        }
+      }),
+      lineWidth: 1,
+      name: data.prefecture.name,
+      zoneAxis: "x",
+      zones: [
+        {
+          value: yearToUTC(data.boundaryYear),
+        },
+        {
+          dashStyle: "Dash",
+        },
+      ],
+    };
+  });
+};
+
 const useChart = (data: PopulationComposition[]): UseChartResult => {
   const isMobile = useMediaQuery({ maxWidth: BREAK_POINT_SM });
 
@@ -104,20 +172,7 @@ const useChart = (data: PopulationComposition[]): UseChartResult => {
   const [showSeriesCount, setShowSeriesCount] = useState<number>(0);
 
   useEffect(() => {
-    const result = data.map<ChartData>((population) => {
-      return {
-        boundaryYear: population.boundaryYear,
-        prefecture: population.prefecture,
-        data: population.data.map<Plot>((item) => {
-          return {
-            utc: yearToUTC(item.year),
-            year: item.year,
-            value: item.value,
-          };
-        }),
-      };
-    });
-
+    const result = createChartData(data);
     setChartData(result);
   }, [data]);
 
@@ -238,51 +293,7 @@ const useChart = (data: PopulationComposition[]): UseChartResult => {
         },
       },
 
-      series: chartData.map<Highcharts.SeriesOptionsType>((data) => {
-        return {
-          id: data.prefecture.code.toString(),
-          type: "line",
-          data: data.data.map<
-            | {
-                x: number;
-                y: number;
-              }
-            | {
-                x: number;
-                y: number;
-                marker: {
-                  enabled: boolean;
-                };
-              }
-          >((item) => {
-            if (isMobile && item.year > data.boundaryYear) {
-              return {
-                x: item.utc,
-                y: item.value,
-                marker: {
-                  enabled: false,
-                },
-              };
-            } else {
-              return {
-                x: item.utc,
-                y: item.value,
-              };
-            }
-          }),
-          lineWidth: 1,
-          name: data.prefecture.name,
-          zoneAxis: "x",
-          zones: [
-            {
-              value: yearToUTC(data.boundaryYear),
-            },
-            {
-              dashStyle: "Dash",
-            },
-          ],
-        };
-      }),
+      series: createSeriesData(chartData, isMobile),
     };
 
     if (isMobile) {
