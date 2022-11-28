@@ -177,13 +177,23 @@ const useChart = (data: PopulationComposition[]): UseChartResult => {
   }, [data]);
 
   useEffect(() => {
-    const pointsLength = data.length;
-
     const nowYear = new Date().getFullYear();
 
     const options: Highcharts.Options = {
       chart: {
         // zoomType: "x",
+        events: {
+          redraw: function () {
+            let count = this.series.reduce<number>((count, series) => {
+              if (series.visible) {
+                count++;
+              }
+              return count;
+            }, 0);
+
+            setShowSeriesCount(count);
+          },
+        },
       },
 
       title: {
@@ -297,7 +307,7 @@ const useChart = (data: PopulationComposition[]): UseChartResult => {
     };
 
     if (isMobile) {
-      if (pointsLength > 10) {
+      if (showSeriesCount > 10) {
         options.tooltip = {
           shared: false,
           formatter: function () {
