@@ -2,8 +2,10 @@ import "@testing-library/jest-dom";
 import { renderHook, waitFor } from "@testing-library/react";
 import useChart, {
   createChartData,
+  createSeriesData,
   tooltipFormatTypeShare,
   tooltipFormatTypeSingle,
+  yearToUTC,
 } from "@/hooks/useChart";
 import Highcharts from "highcharts";
 import { stub } from "../mocks/utils";
@@ -350,5 +352,135 @@ describe("tooltipFormatTypeSingle", () => {
   <div class="footer"></div>
 </div>`;
     expect(tooltipFormatTypeSingle(ctx)).toEqual(wont);
+  });
+});
+
+describe("createSeriesData", () => {
+  it("ただしく表示できること PC", () => {
+    const data = [
+      {
+        prefecture: {
+          code: 13,
+          name: "東京都",
+        },
+        boundaryYear: 1960,
+        data: [
+          {
+            utc: Date.UTC(1960, 0, 1),
+            year: 1960,
+            value: 9683802,
+          },
+          {
+            utc: Date.UTC(1965, 0, 1),
+            year: 1965,
+            value: 10869244,
+          },
+          {
+            utc: Date.UTC(1970, 0, 1),
+            year: 1970,
+            value: 11408071,
+          },
+        ],
+      },
+    ];
+    const wont = [
+      {
+        id: "13",
+        type: "line",
+        data: [
+          {
+            x: Date.UTC(1960, 0, 1),
+            y: 9683802,
+          },
+          {
+            x: Date.UTC(1965, 0, 1),
+            y: 10869244,
+          },
+          {
+            x: Date.UTC(1970, 0, 1),
+            y: 11408071,
+          },
+        ],
+        lineWidth: 1,
+        name: "東京都",
+        zoneAxis: "x",
+        zones: [
+          {
+            value: Date.UTC(1960, 0, 1),
+          },
+          {
+            dashStyle: "Dash",
+          },
+        ],
+      },
+    ];
+    expect(createSeriesData(data, false)).toEqual(wont);
+  });
+
+  it("ただしく表示できること SP", () => {
+    const data = [
+      {
+        prefecture: {
+          code: 13,
+          name: "東京都",
+        },
+        boundaryYear: 1960,
+        data: [
+          {
+            utc: Date.UTC(1960, 0, 1),
+            year: 1960,
+            value: 9683802,
+          },
+          {
+            utc: Date.UTC(1965, 0, 1),
+            year: 1965,
+            value: 10869244,
+          },
+          {
+            utc: Date.UTC(1970, 0, 1),
+            year: 1970,
+            value: 11408071,
+          },
+        ],
+      },
+    ];
+    const wont = [
+      {
+        id: "13",
+        type: "line",
+        data: [
+          {
+            x: Date.UTC(1960, 0, 1),
+            y: 9683802,
+          },
+          {
+            x: Date.UTC(1965, 0, 1),
+            y: 10869244,
+            marker: {
+              enabled: false,
+            },
+          },
+          {
+            x: Date.UTC(1970, 0, 1),
+            y: 11408071,
+            marker: {
+              enabled: false,
+            },
+          },
+        ],
+        lineWidth: 1,
+        name: "東京都",
+        zoneAxis: "x",
+        zones: [
+          {
+            value: Date.UTC(1960, 0, 1),
+          },
+          {
+            dashStyle: "Dash",
+          },
+        ],
+      },
+    ];
+    expect(createSeriesData(data, true)).toEqual(wont);
   });
 });
