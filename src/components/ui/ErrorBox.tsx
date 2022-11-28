@@ -4,7 +4,7 @@ import { FC } from "react";
 
 export type ErrorBoxProps = {
   message: string;
-  retry: boolean;
+  retry?: boolean;
   onRetry?: () => void;
   retryText?: string;
   className?: string;

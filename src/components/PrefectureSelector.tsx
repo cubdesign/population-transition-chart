@@ -1,7 +1,7 @@
 import styles from "@/styles/components/PrefectureSelector.module.scss";
 import React, { FC } from "react";
 import LabeledCheckbox from "@/components/ui/LabeledCheckbox";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import usePrefecture, { Prefecture } from "../hooks/usePrefecture";
@@ -29,7 +29,7 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
   onChangePrefecture,
   className,
 }) => {
-  const { control, handleSubmit, setValue } = useForm<FormInput>({
+  const { control, setValue } = useForm<FormInput>({
     resolver: yupResolver(schema),
     defaultValues: { selected: [] },
   });
@@ -49,14 +49,6 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
       });
   };
 
-  const onSubmit: SubmitHandler<FormInput> = async (data) => {
-    try {
-      // console.log(getSelectedPrefecture(data.selected));
-    } catch (err) {
-      // console.log(err);
-    }
-  };
-
   if (isError) {
     return (
       <ErrorBox
@@ -73,7 +65,7 @@ const PrefectureSelector: FC<PrefectureSelectorProps> = ({
       {isLoading ? (
         <div className={styles.loading}>Loading...</div>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <Controller
             control={control}
             name={`selected`}
